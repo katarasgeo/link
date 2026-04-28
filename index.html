@@ -507,10 +507,9 @@
             }
             
             .phone-btn {
-                padding: 14px 24px;
                 font-size: 16px;
             }
-            
+
             .social-btn {
                 width: 56px;
                 height: 56px;
@@ -679,17 +678,28 @@
 
         /* Touch Device Optimizations */
         @media (hover: none) {
-            .phone-btn:hover,
             .social-btn:hover,
             .btn-primary:hover {
                 transform: none;
             }
-            
-            .phone-btn:active,
+
             .social-btn:active,
             .btn-primary:active {
                 transform: scale(0.98);
                 opacity: 0.9;
+            }
+
+            .phone-btn:active span {
+                max-width: 160px;
+                opacity: 1;
+                margin-left: 8px;
+            }
+
+            .phone-btn:active {
+                background: var(--black);
+                color: var(--white);
+                width: auto;
+                padding: 12px 20px;
             }
         }
 
