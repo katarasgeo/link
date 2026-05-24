@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Υπολογιστής Πλαστικών Δαπέδων</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,Arial,sans-serif;background:#f1f5f9;color:#1e293b;font-size:14px;line-height:1.5}
+.wrap{max-width:960px;margin:0 auto;padding:16px}
+h1{font-size:1.35rem;font-weight:700;color:#1e3a8a;margin-bottom:3px}
+.subtitle{color:#64748b;font-size:.82rem;margin-bottom:18px}
+.card{background:#fff;border-radius:10px;padding:20px;margin-bottom:14px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.card-title{font-size:.92rem;font-weight:700;color:#2563eb;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #dbeafe;letter-spacing:.01em}
+
+/* Type tabs */
+.type-tabs{display:flex;flex-wrap:wrap;gap:8px}
+.type-tab{padding:8px 18px;border:2px solid #cbd5e1;border-radius:7px;background:#f8fafc;color:#475569;cursor:pointer;font-size:.85rem;font-weight:600;transition:all .15s;line-height:1}
+.type-tab:hover{border-color:#2563eb;color:#2563eb;background:#eff6ff}
+.type-tab.active{border-color:#2563eb;background:#2563eb;color:#fff}
+
+/* Room rows */
+.room-row{display:grid;gap:8px;align-items:end;padding:10px 12px;background:#f8fafc;border-radius:7px;margin-bottom:8px;border:1px solid #e2e8f0}
+.room-row.mode-lxw{grid-template-columns:minmax(120px,1.5fr) 85px 85px 80px 30px}
+.room-row.mode-m2{grid-template-columns:minmax(120px,2fr) 100px 80px 30px}
+
+/* Forms */
+label,.lbl{font-size:.75rem;color:#64748b;display:block;margin-bottom:3px;font-weight:500}
+input[type=number],input[type=text],select{
+  width:100%;padding:7px 9px;border:1px solid #cbd5e1;border-radius:5px;
+  font-size:.85rem;color:#1e293b;background:#fff;transition:border-color .15s;
+}
+input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px #dbeafe40}
+.field{display:flex;flex-direction:column}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+
+/* Checkbox */
+.chk-row{display:flex;align-items:center;gap:8px;padding:5px 0;cursor:pointer}
+.chk-row input[type=checkbox]{width:16px;height:16px;accent-color:#2563eb;cursor:pointer;flex-shrink:0}
+.chk-row span{font-size:.85rem;color:#1e293b;font-weight:500;cursor:pointer}
+
+/* Mode toggle */
+.mode-toggle{display:inline-flex;border:1px solid #cbd5e1;border-radius:5px;overflow:hidden}
+.mode-btn{padding:4px 10px;border:none;background:#f8fafc;color:#64748b;cursor:pointer;font-size:.75rem;font-weight:600}
+.mode-btn.active{background:#2563eb;color:#fff}
+
+/* Buttons */
+.btn-add{padding:7px 14px;border:2px dashed #2563eb;border-radius:7px;background:none;color:#2563eb;cursor:pointer;font-size:.82rem;font-weight:600;transition:background .15s}
+.btn-add:hover{background:#eff6ff}
+.btn-del{width:26px;height:26px;border:none;background:#fee2e2;color:#dc2626;border-radius:4px;cursor:pointer;font-size:1rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:end;margin-bottom:1px}
+.btn-del:hover{background:#dc2626;color:#fff}
+.btn-calc{display:block;width:100%;padding:14px;background:#2563eb;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin:6px 0 14px;transition:background .15s;letter-spacing:.02em}
+.btn-calc:hover{background:#1d4ed8}
+.btn-print{padding:10px 22px;border:none;border-radius:7px;font-size:.9rem;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .15s}
+.btn-green{background:#16a34a;color:#fff}.btn-green:hover{background:#15803d}
+.btn-blue{background:#2563eb;color:#fff}.btn-blue:hover{background:#1d4ed8}
+
+/* Total bar */
+.total-bar{background:#eff6ff;border:1px solid #bfdbfe;border-radius:7px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;margin-top:10px}
+.total-bar .lbl-sm{font-size:.8rem;color:#1e40af}
+.total-bar .val{font-size:1.05rem;font-weight:700;color:#1e40af}
+
+/* Notes */
+.note{font-size:.72rem;color:#94a3b8;margin-top:4px}
+.info-box{background:#fefce8;border:1px solid #fde68a;border-radius:6px;padding:9px 12px;font-size:.78rem;color:#854d0e;margin-top:8px}
+.sep{border-top:1px solid #f1f5f9;margin:14px 0}
+
+/* Results */
+.results-wrap{background:#fff;border-radius:10px;padding:24px;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.results-hdr{font-size:1.05rem;font-weight:700;color:#1e3a8a;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #dbeafe}
+.meta-row{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:20px;padding:12px 14px;background:#f8fafc;border-radius:7px;border:1px solid #e2e8f0}
+.meta-item .lbl{font-size:.72rem;color:#64748b}
+.meta-item .val{font-weight:700;font-size:.9rem}
+table.rt{width:100%;border-collapse:collapse;margin-bottom:16px;font-size:.85rem}
+table.rt th{padding:7px 12px;background:#f8fafc;color:#64748b;font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid #e2e8f0;text-align:left}
+table.rt td{padding:7px 12px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+table.rt tr:hover td{background:#fafbff}
+table.rt .cat td{background:#dbeafe;color:#1e40af;font-weight:700;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;padding:5px 12px}
+table.rt .hl td{background:#eff6ff;font-weight:600}
+table.rt .note-row td{color:#64748b;font-size:.72rem;font-style:italic;padding:3px 12px;border-bottom:none}
+table.rt .cost-val{color:#059669;font-weight:700;text-align:right}
+table.rt .total-sep td{border-top:3px solid #2563eb;padding-top:12px}
+table.rt .grand-total td{font-size:1.1rem;font-weight:700;color:#16a34a;padding-top:4px}
+.qty-val{text-align:right;font-weight:600}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+@media(max-width:640px){
+  .grid2,.grid3,.grid4{grid-template-columns:1fr 1fr}
+  .room-row.mode-lxw{grid-template-columns:1fr 1fr 1fr;}.room-row.mode-lxw .btn-del{grid-column:3;grid-row:1}
+  .room-row.mode-m2{grid-template-columns:1fr 1fr}
+  .meta-row{gap:14px}
+}
+
+/* ── Print ────────────────────── */
+@media print{
+  body{background:#fff;font-size:10pt;color:#000}
+  .no-print{display:none!important}
+  .wrap{max-width:100%;padding:0}
+  .card{box-shadow:none;border:1px solid #ddd;margin-bottom:10px;page-break-inside:avoid;padding:14px}
+  .card-title{font-size:.85rem}
+  h1{font-size:1.1rem}
+  .results-wrap{box-shadow:none;padding:0}
+  table.rt td,table.rt th{padding:5px 10px;font-size:9pt}
+  .btn-calc,.btn-add,.btn-del,.btn-row,.mode-toggle,.type-tabs,
+  #roomsContainer,.sep,.total-bar,.info-box,
+  #paramsCard,#skirtingCard,#pricesCard{display:none!important}
+  .results-hdr{font-size:1rem}
+  .meta-row{padding:8px 10px}
+  table.rt .grand-total td{font-size:1rem}
+  @page{margin:1.5cm}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Υπολογιστής Πλαστικών Δαπέδων</h1>
+  <p class="subtitle">Επαγγελματικός υπολογισμός υλικών &amp; κόστους τοποθέτησης</p>
+
+  <!-- 1. ΤΥΠΟΣ -->
+  <div class="card no-print">
+    <div class="card-title">1. Τύπος Δαπέδου</div>
+    <div class="type-tabs" id="typeTabs">
+      <button class="type-tab active" data-type="vinyl-click">Vinyl Click (LVT/LVP)</button>
+      <button class="type-tab" data-type="vinyl-kolla">Vinyl Κόλλας</button>
+      <button class="type-tab" data-type="pvc-rolo">PVC Ρολό</button>
+      <button class="type-tab" data-type="laminate">Laminate</button>
+    </div>
+  </div>
+
+  <!-- 2. ΧΩΡΟΙ -->
+  <div class="card no-print">
+    <div class="card-title">2. Χώροι</div>
+    <div id="roomsContainer"></div>
+    <button class="btn-add" onclick="addRoom()">+ Προσθήκη Χώρου</button>
+    <div class="total-bar" style="margin-top:12px">
+      <span class="lbl-sm">Συνολικά καθαρά m²</span>
+      <span class="val" id="totalAreaDisplay">0.00 m²</span>
+    </div>
+  </div>
+
+  <!-- 3. ΠΑΡΑΜΕΤΡΟΙ -->
+  <div class="card no-print" id="paramsCard">
+    <div class="card-title">3. Παράμετροι Υλικού</div>
+    <div id="paramsContent"></div>
+  </div>
+
+  <!-- 4. ΣΟΒΑΤΕΠΙ -->
+  <div class="card no-print" id="skirtingCard">
+    <div class="card-title">4. Σοβατεπί &amp; Διαμορφωτές</div>
+    <label class="chk-row" style="margin-bottom:12px">
+      <input type="checkbox" id="skirtingEnabled" checked onchange="renderSkirting()">
+      <span>Συμπερίληψη σοβατεπί &amp; διαμορφωτών</span>
+    </label>
+    <div id="skirtingContent"></div>
+  </div>
+
+  <!-- 5. ΤΙΜΕΣ -->
+  <div class="card no-print" id="pricesCard">
+    <div class="card-title">5. Τιμές &amp; Εργασία</div>
+    <div id="pricesContent"></div>
+  </div>
+
+  <button class="btn-calc no-print" onclick="calculate()">▶ ΥΠΟΛΟΓΙΣΜΟΣ</button>
+
+  <!-- ΑΠΟΤΕΛΕΣΜΑΤΑ -->
+  <div id="resultsSection" style="display:none"></div>
+</div>
+
+<script>
+// ════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════
+let floorType = 'vinyl-click';
+let roomIdSeq = 1;
+let rooms = [];
+
+// ════════════════════════════════════════════
+//  INIT
+// ════════════════════════════════════════════
+function init() {
+  addRoom();
+  renderParams();
+  renderSkirting();
+  renderPrices();
+  document.querySelectorAll('.type-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      floorType = btn.dataset.type;
+      document.querySelectorAll('.type-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderParams();
+      renderPrices();
+    });
+  });
+}
+
+// ════════════════════════════════════════════
+//  ROOMS
+// ════════════════════════════════════════════
+function addRoom() {
+  rooms.push({ id: roomIdSeq++, mode: 'lxw', name: '', len: '', wid: '', m2: '' });
+  renderRooms();
+}
+
+function removeRoom(id) {
+  if (rooms.length === 1) return;
+  rooms = rooms.filter(r => r.id !== id);
+  renderRooms();
+  onRoomsChange();
+}
+
+function setRoomMode(id, mode) {
+  rooms.find(r => r.id === id).mode = mode;
+  renderRooms();
+  onRoomsChange();
+}
+
+function renderRooms() {
+  document.getElementById('roomsContainer').innerHTML = rooms.map(r => {
+    const isLxW = r.mode === 'lxw';
+    const rowClass = isLxW ? 'mode-lxw' : 'mode-m2';
+    const modeToggle = `
+      <div class="mode-toggle" style="align-self:end;margin-bottom:1px">
+        <button class="mode-btn ${isLxW ? 'active' : ''}" onclick="setRoomMode(${r.id},'lxw')">Μ×Π</button>
+        <button class="mode-btn ${!isLxW ? 'active' : ''}" onclick="setRoomMode(${r.id},'m2')">m²</button>
+      </div>`;
+    const delBtn = `<button class="btn-del" onclick="removeRoom(${r.id})" title="Διαγραφή" ${rooms.length===1?'style="visibility:hidden"':''}>×</button>`;
+
+    if (isLxW) {
+      return `<div class="room-row ${rowClass}">
+        <div class="field">
+          <label>Ονομασία χώρου</label>
+          <input type="text" placeholder="π.χ. Σαλόνι" value="${esc(r.name)}"
+            oninput="rooms.find(x=>x.id===${r.id}).name=this.value">
+        </div>
+        <div class="field">
+          <label>Μήκος (m)</label>
+          <input type="number" step="0.01" min="0" placeholder="0.00" value="${r.len}"
+            oninput="rooms.find(x=>x.id===${r.id}).len=this.value;onRoomsChange()">
+        </div>
+        <div class="field">
+          <label>Πλάτος (m)</label>
+          <input type="number" step="0.01" min="0" placeholder="0.00" value="${r.wid}"
+            oninput="rooms.find(x=>x.id===${r.id}).wid=this.value;onRoomsChange()">
+        </div>
+        ${modeToggle}
+        ${delBtn}
+      </div>`;
+    } else {
+      return `<div class="room-row ${rowClass}">
+        <div class="field">
+          <label>Ονομασία χώρου</label>
+          <input type="text" placeholder="π.χ. Σαλόνι" value="${esc(r.name)}"
+            oninput="rooms.find(x=>x.id===${r.id}).name=this.value">
+        </div>
+        <div class="field">
+          <label>Εμβαδόν (m²)</label>
+          <input type="number" step="0.01" min="0" placeholder="0.00" value="${r.m2}"
+            oninput="rooms.find(x=>x.id===${r.id}).m2=this.value;onRoomsChange()">
+        </div>
+        ${modeToggle}
+        ${delBtn}
+      </div>`;
+    }
+  }).join('');
+}
+
+function roomArea(r) {
+  if (r.mode === 'lxw') return (parseFloat(r.len)||0) * (parseFloat(r.wid)||0);
+  return parseFloat(r.m2) || 0;
+}
+
+function roomPerimeter(r) {
+  if (r.mode !== 'lxw') return 0;
+  const l = parseFloat(r.len)||0, w = parseFloat(r.wid)||0;
+  return 2*(l+w);
+}
+
+function totalArea() { return rooms.reduce((s,r) => s + roomArea(r), 0); }
+function totalPerimeter() { return rooms.reduce((s,r) => s + roomPerimeter(r), 0); }
+
+function onRoomsChange() {
+  const area = totalArea();
+  document.getElementById('totalAreaDisplay').textContent = fmt2(area) + ' m²';
+  autoUpdateSkirting();
+}
+
+// ════════════════════════════════════════════
+//  PARAMS
+// ════════════════════════════════════════════
+function renderParams() {
+  const t = floorType;
+  const defaultWaste = (t === 'pvc-rolo') ? 10 : 5;
+  let html = '';
+
+  if (t === 'vinyl-click' || t === 'laminate') {
+    html = `
+    <div class="grid3">
+      <div class="field"><label>Απώλειες %</label>
+        <input type="number" id="wasteP" step="1" min="0" max="50" value="${defaultWaste}"></div>
+      <div class="field"><label>m² ανά πακέτο (προαιρετικό)</label>
+        <input type="number" id="pkgSize" step="0.01" min="0" placeholder="π.χ. 2.16"></div>
+      <div></div>
+    </div>
+    <div class="sep"></div>
+    <label class="chk-row" for="useUnderlay">
+      <input type="checkbox" id="useUnderlay" onchange="tog('underlayFields',this.checked)">
+      <span>Χρήση υποστρώματος / underlay</span>
+    </label>
+    <div id="underlayFields" style="display:none;margin-top:12px">
+      <div class="grid3">
+        <div class="field"><label>Τιμή underlay (€/m²)</label>
+          <input type="number" id="underlayPrice" step="0.01" min="0" placeholder="0.00"></div>
+        <div class="field"><label>m² ανά ρολό underlay (προαιρ.)</label>
+          <input type="number" id="underlayRoll" step="0.01" min="0" placeholder="π.χ. 10"></div>
+        <div></div>
+      </div>
+    </div>`;
+
+  } else if (t === 'vinyl-kolla') {
+    html = `
+    <div class="grid3">
+      <div class="field"><label>Απώλειες %</label>
+        <input type="number" id="wasteP" step="1" min="0" max="50" value="${defaultWaste}"></div>
+      <div></div><div></div>
+    </div>
+    <div class="sep"></div>
+    <div class="grid4">
+      <div class="field"><label>Κατανάλωση κόλλας (kg/m²)</label>
+        <input type="number" id="glueRate" step="0.01" min="0" placeholder="0.30"></div>
+      <div class="field"><label>Τιμή κόλλας (€/kg)</label>
+        <input type="number" id="glueKgPrice" step="0.01" min="0" placeholder="0.00"></div>
+      <div class="field"><label>kg ανά συσκευασία (προαιρ.)</label>
+        <input type="number" id="gluePackKg" step="0.1" min="0" placeholder="π.χ. 5"></div>
+      <div></div>
+    </div>
+    <div class="sep"></div>
+    <label class="chk-row" for="usePrimer">
+      <input type="checkbox" id="usePrimer" onchange="tog('primerFields',this.checked)">
+      <span>Χρήση primer</span>
+    </label>
+    <div id="primerFields" style="display:none;margin-top:12px">
+      <div class="grid4">
+        <div class="field"><label>Κατανάλωση primer (kg/m²)</label>
+          <input type="number" id="primerRate" step="0.01" min="0" placeholder="0.20" value="0.20"></div>
+        <div class="field"><label>Τιμή primer (€/kg)</label>
+          <input type="number" id="primerKgPrice" step="0.01" min="0" placeholder="0.00"></div>
+        <div class="field"><label>kg ανά συσκευασία (προαιρ.)</label>
+          <input type="number" id="primerPackKg" step="0.1" min="0" placeholder="π.χ. 5"></div>
+        <div></div>
+      </div>
+    </div>`;
+
+  } else if (t === 'pvc-rolo') {
+    html = `
+    <div class="grid4">
+      <div class="field"><label>Απώλειες %</label>
+        <input type="number" id="wasteP" step="1" min="0" max="50" value="${defaultWaste}"></div>
+      <div class="field"><label>Πλάτος ρολού (m)</label>
+        <select id="rollWidthSel" onchange="toggleCustomRoll()">
+          <option value="2">2 m</option>
+          <option value="3" selected>3 m</option>
+          <option value="4">4 m</option>
+          <option value="0">Άλλο...</option>
+        </select></div>
+      <div class="field" id="rollCustomWrap" style="display:none"><label>Πλάτος ρολού (m)</label>
+        <input type="number" id="rollWidthCustom" step="0.1" min="0.5" placeholder="π.χ. 2.5"></div>
+      <div></div>
+    </div>
+    <div class="sep"></div>
+    <div class="grid4">
+      <div class="field"><label>Κατανάλωση κόλλας (kg/m²)</label>
+        <input type="number" id="glueRate" step="0.01" min="0" placeholder="0.30"></div>
+      <div class="field"><label>Τιμή κόλλας (€/kg)</label>
+        <input type="number" id="glueKgPrice" step="0.01" min="0" placeholder="0.00"></div>
+      <div class="field"><label>kg ανά συσκευασία (προαιρ.)</label>
+        <input type="number" id="gluePackKg" step="0.1" min="0" placeholder="π.χ. 5"></div>
+      <div></div>
+    </div>
+    <div class="sep"></div>
+    <label class="chk-row" for="usePrimer">
+      <input type="checkbox" id="usePrimer" onchange="tog('primerFields',this.checked)">
+      <span>Χρήση primer</span>
+    </label>
+    <div id="primerFields" style="display:none;margin-top:12px">
+      <div class="grid4">
+        <div class="field"><label>Κατανάλωση primer (kg/m²)</label>
+          <input type="number" id="primerRate" step="0.01" min="0" placeholder="0.20" value="0.20"></div>
+        <div class="field"><label>Τιμή primer (€/kg)</label>
+          <input type="number" id="primerKgPrice" step="0.01" min="0" placeholder="0.00"></div>
+        <div class="field"><label>kg ανά συσκευασία (προαιρ.)</label>
+          <input type="number" id="primerPackKg" step="0.1" min="0" placeholder="π.χ. 5"></div>
+        <div></div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById('paramsContent').innerHTML = html;
+}
+
+function tog(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = show ? 'block' : 'none';
+}
+
+function toggleCustomRoll() {
+  const sel = document.getElementById('rollWidthSel');
+  tog('rollCustomWrap', sel && sel.value === '0');
+}
+
+function getRollWidth() {
+  const sel = document.getElementById('rollWidthSel');
+  if (!sel) return 0;
+  const v = sel.value;
+  if (v === '0') return nv('rollWidthCustom');
+  return parseFloat(v) || 0;
+}
+
+// ════════════════════════════════════════════
+//  SKIRTING
+// ════════════════════════════════════════════
+function renderSkirting() {
+  const enabled = document.getElementById('skirtingEnabled').checked;
+  const el = document.getElementById('skirtingContent');
+  if (!enabled) { el.innerHTML = ''; return; }
+
+  const perim = totalPerimeter();
+  el.innerHTML = `
+    <div class="grid3" style="margin-bottom:14px">
+      <div class="field"><label>Αριθμός πορτών</label>
+        <input type="number" id="numDoors" step="1" min="0" value="0" oninput="autoUpdateSkirting()"></div>
+      <div class="field"><label>Πλάτος πόρτας (m)</label>
+        <input type="number" id="doorW" step="0.01" min="0" value="0.90" oninput="autoUpdateSkirting()"></div>
+      <div></div>
+    </div>
+    <div class="grid2" style="margin-bottom:0">
+      <div class="field">
+        <label>Σοβατεπί — τρέχοντα μέτρα</label>
+        <input type="number" id="skirtMeters" step="0.1" min="0" value="${perim.toFixed(2)}"
+          oninput="skirtManual=true;syncConnector()">
+        <div class="note">Αυτόματο από περίμετρο. Επεξεργαστείτε αν χρειαστεί.</div>
+      </div>
+      <div class="field">
+        <label>Τιμή σοβατεπί (€/m)</label>
+        <input type="number" id="skirtPrice" step="0.01" min="0" placeholder="0.00"></div>
+    </div>
+    <div class="sep"></div>
+    <div class="grid2">
+      <div class="field">
+        <label>Διαμορφωτές — τρέχοντα μέτρα</label>
+        <input type="number" id="connMeters" step="0.1" min="0" value="${perim.toFixed(2)}"
+          oninput="connManual=true">
+        <div class="note">Ίδια μέτρα με σοβατεπί αυτόματα. Επεξεργαστείτε αν χρειαστεί.</div>
+      </div>
+      <div class="field">
+        <label>Τιμή διαμορφωτή (€/m)</label>
+        <input type="number" id="connPrice" step="0.01" min="0" placeholder="0.00"></div>
+    </div>`;
+}
+
+let skirtManual = false;
+let connManual  = false;
+
+function autoUpdateSkirting() {
+  onRoomsChange();
+  const skEl = document.getElementById('skirtMeters');
+  if (!skEl) return;
+  if (!skirtManual) {
+    const perim = totalPerimeter();
+    const doors = parseInt(document.getElementById('numDoors')?.value||0)||0;
+    const dw    = parseFloat(document.getElementById('doorW')?.value||0.9)||0.9;
+    const meters = Math.max(0, perim - doors*dw);
+    skEl.value = meters.toFixed(2);
+    syncConnector();
+  }
+}
+
+function syncConnector() {
+  const skEl = document.getElementById('skirtMeters');
+  const cnEl = document.getElementById('connMeters');
+  if (skEl && cnEl && !connManual) cnEl.value = skEl.value;
+}
+
+// ════════════════════════════════════════════
+//  PRICES
+// ════════════════════════════════════════════
+function renderPrices() {
+  document.getElementById('pricesContent').innerHTML = `
+    <div class="grid3" style="margin-bottom:0">
+      <div class="field"><label>Τιμή υλικού δαπέδου (€/m²)</label>
+        <input type="number" id="matPrice" step="0.01" min="0" placeholder="0.00"></div>
+      <div></div><div></div>
+    </div>
+    <div class="sep"></div>
+    <div style="font-size:.8rem;font-weight:700;color:#475569;margin-bottom:10px;text-transform:uppercase;letter-spacing:.04em">Εργασία τοποθέτησης</div>
+    <div class="grid2">
+      <div class="field"><label>Ανά τετραγωνικό (€/m²)</label>
+        <input type="number" id="laborM2" step="0.01" min="0" placeholder="0.00"></div>
+      <div class="field"><label>Ολική αμοιβή (€)</label>
+        <input type="number" id="laborFlat" step="0.01" min="0" placeholder="0.00"></div>
+    </div>
+    <div class="note">Συμπληρώστε ένα ή και τα δύο. Αν συμπληρωθούν και τα δύο αθροίζονται.</div>`;
+}
+
+// ════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════
+function nv(id) { return parseFloat(document.getElementById(id)?.value)||0; }
+function iv(id) { return parseInt(document.getElementById(id)?.value)||0; }
+function isChk(id) { return document.getElementById(id)?.checked||false; }
+function fmt2(n) { return n.toFixed(2); }
+function fmtN(n) { return n.toLocaleString('el-GR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function esc(s) { return (s||'').replace(/"/g,'&quot;'); }
+
+// ════════════════════════════════════════════
+//  CALCULATE
+// ════════════════════════════════════════════
+function calculate() {
+  const net = totalArea();
+  if (net <= 0) { alert('Παρακαλώ εισάγετε διαστάσεις χώρου.'); return; }
+
+  const wasteP = nv('wasteP');
+  const wasteFactor = 1 + wasteP/100;
+  const matWithWaste = net * wasteFactor;
+  const t = floorType;
+  const matPrice = nv('matPrice');
+
+  let lines = [];
+  let totalCost = 0;
+
+  function cat(lbl) { lines.push({type:'cat', lbl}); }
+  function row(lbl, qty, unit, opts={}) { lines.push({type:'row', lbl, qty, unit, ...opts}); }
+  function noteRow(txt) { lines.push({type:'note', txt}); }
+  function costRow(lbl, cost) {
+    if (cost > 0) { lines.push({type:'cost', lbl, cost}); totalCost += cost; }
+  }
+
+  // ── Flooring material ─────────────────────
+  const typeLabels = {
+    'vinyl-click':'Vinyl Click (LVT/LVP)',
+    'vinyl-kolla':'Vinyl Κόλλας',
+    'pvc-rolo':'PVC Ρολό',
+    'laminate':'Laminate'
+  };
+  cat('ΥΛΙΚΟ ΔΑΠΕΔΟΥ — ' + typeLabels[t]);
+  row('Καθαρά m² (χώρος)', net, 'm²');
+
+  if (t === 'vinyl-click' || t === 'laminate') {
+    row(`m² με απώλειες ${wasteP}%`, matWithWaste, 'm²', {hl:true});
+    const pkgSize = nv('pkgSize');
+    if (pkgSize > 0) {
+      const pkgs = Math.ceil(matWithWaste / pkgSize);
+      const actual = pkgs * pkgSize;
+      row('Πακέτα υλικού', pkgs, 'τεμ.', {note:`${pkgSize} m²/πακέτο → ${fmt2(actual)} m² συνολικά`});
+    }
+    costRow('Κόστος υλικού δαπέδου', matWithWaste * matPrice);
+
+    // Underlay
+    if (isChk('useUnderlay')) {
+      cat('ΥΠΟΣΤΡΩΜΑ (UNDERLAY)');
+      const underlayArea = net * 1.05;
+      row('m² underlay (+5% απώλειες)', underlayArea, 'm²');
+      const uRoll = nv('underlayRoll');
+      if (uRoll > 0) row('Ρολά underlay', Math.ceil(underlayArea/uRoll), 'τεμ.', {note:`${uRoll} m²/ρολό`});
+      costRow('Κόστος underlay', underlayArea * nv('underlayPrice'));
+    }
+  }
+
+  if (t === 'vinyl-kolla') {
+    row(`m² με απώλειες ${wasteP}%`, matWithWaste, 'm²', {hl:true});
+    costRow('Κόστος υλικού δαπέδου', matWithWaste * matPrice);
+
+    // Glue
+    const glueRate = nv('glueRate');
+    if (glueRate > 0) {
+      cat('ΚΟΛΛΑ');
+      const glueKg = matWithWaste * glueRate;
+      row('Κόλλα', glueKg, 'kg', {note:`${glueRate} kg/m²`});
+      const gPack = nv('gluePackKg');
+      if (gPack > 0) row('Συσκευασίες κόλλας', Math.ceil(glueKg/gPack), 'τεμ.', {note:`${gPack} kg/τεμ.`});
+      costRow('Κόστος κόλλας', glueKg * nv('glueKgPrice'));
+    }
+    // Primer
+    if (isChk('usePrimer')) {
+      cat('PRIMER');
+      const pRate = nv('primerRate')||0.20;
+      const pKg = net * pRate;
+      row('Primer', pKg, 'kg', {note:`${pRate} kg/m²`});
+      const pPack = nv('primerPackKg');
+      if (pPack > 0) row('Συσκευασίες primer', Math.ceil(pKg/pPack), 'τεμ.', {note:`${pPack} kg/τεμ.`});
+      costRow('Κόστος primer', pKg * nv('primerKgPrice'));
+    }
+  }
+
+  if (t === 'pvc-rolo') {
+    const rollW = getRollWidth();
+
+    // Strip calculation per room
+    let totalRunM = 0;
+    let stripNotes = [];
+    let hasUnknown = false;
+
+    rooms.forEach(r => {
+      const area = roomArea(r);
+      if (area <= 0) return;
+      const rName = r.name || `Χώρος ${r.id}`;
+      if (r.mode === 'lxw' && rollW > 0) {
+        const l = parseFloat(r.len)||0, w = parseFloat(r.wid)||0;
+        const longS = Math.max(l,w), shortS = Math.min(l,w);
+        const strips = Math.ceil(shortS / rollW);
+        const runM = strips * longS;
+        totalRunM += runM;
+        stripNotes.push(`${rName}: ${strips} λωρίδ. × ${fmt2(longS)}m = ${fmt2(runM)} τρ.μ.`);
+      } else {
+        if (rollW > 0) { totalRunM += area / rollW; hasUnknown = true; }
+        else totalRunM += Math.sqrt(area);
+      }
+    });
+
+    const totalRunMwaste = totalRunM * wasteFactor;
+    const effectiveArea = rollW > 0 ? totalRunMwaste * rollW : matWithWaste;
+
+    row('Καθαρά m²', net, 'm²');
+    if (rollW > 0) {
+      row('Τρέχοντα μέτρα ρολού (χωρίς απώλειες)', totalRunM, 'τρ.μ.');
+      row(`Τρέχοντα μέτρα ρολού (με ${wasteP}% απώλειες)`, totalRunMwaste, 'τρ.μ.', {hl:true});
+      row('Πραγματική επιφάνεια αγοράς', effectiveArea, 'm²');
+      if (hasUnknown) noteRow('* Χώρος/οι χωρίς Μ×Π → εκτιμητικός υπολογισμός τρ.μ.');
+      if (stripNotes.length) noteRow('Ανά χώρο: ' + stripNotes.join('  |  '));
+    } else {
+      row(`m² με απώλειες ${wasteP}%`, matWithWaste, 'm²', {hl:true});
+    }
+    costRow('Κόστος υλικού δαπέδου', effectiveArea * matPrice);
+
+    // Glue
+    const glueRate = nv('glueRate');
+    if (glueRate > 0) {
+      cat('ΚΟΛΛΑ');
+      const glueKg = effectiveArea * glueRate;
+      row('Κόλλα', glueKg, 'kg', {note:`${glueRate} kg/m²`});
+      const gPack = nv('gluePackKg');
+      if (gPack > 0) row('Συσκευασίες κόλλας', Math.ceil(glueKg/gPack), 'τεμ.', {note:`${gPack} kg/τεμ.`});
+      costRow('Κόστος κόλλας', glueKg * nv('glueKgPrice'));
+    }
+    // Primer
+    if (isChk('usePrimer')) {
+      cat('PRIMER');
+      const pRate = nv('primerRate')||0.20;
+      const pKg = net * pRate;
+      row('Primer', pKg, 'kg', {note:`${pRate} kg/m²`});
+      const pPack = nv('primerPackKg');
+      if (pPack > 0) row('Συσκευασίες primer', Math.ceil(pKg/pPack), 'τεμ.', {note:`${pPack} kg/τεμ.`});
+      costRow('Κόστος primer', pKg * nv('primerKgPrice'));
+    }
+  }
+
+  // ── Skirting ─────────────────────────────
+  if (isChk('skirtingEnabled')) {
+    const skM = nv('skirtMeters') || parseFloat(document.getElementById('skirtMeters')?.value)||0;
+    const cnM = nv('connMeters')  || parseFloat(document.getElementById('connMeters')?.value)||0;
+    if (skM > 0 || cnM > 0) {
+      cat('ΣΟΒΑΤΕΠΙ & ΔΙΑΜΟΡΦΩΤΕΣ');
+      row('Σοβατεπί', skM, 'τρ.μ.');
+      costRow('Κόστος σοβατεπί', skM * nv('skirtPrice'));
+      row('Διαμορφωτές', cnM, 'τρ.μ.');
+      costRow('Κόστος διαμορφωτών', cnM * nv('connPrice'));
+    }
+  }
+
+  // ── Labor ─────────────────────────────────
+  const labM2   = nv('laborM2');
+  const labFlat = nv('laborFlat');
+  if (labM2 > 0 || labFlat > 0) {
+    cat('ΕΡΓΑΣΙΑ ΤΟΠΟΘΕΤΗΣΗΣ');
+    if (labM2 > 0)   costRow(`Εργασία ${labM2} €/m² × ${fmt2(net)} m²`, net * labM2);
+    if (labFlat > 0) costRow('Αμοιβή ολική (κατ\' αποκοπή)', labFlat);
+  }
+
+  renderResults(lines, totalCost, net, wasteP);
+}
+
+// ════════════════════════════════════════════
+//  RENDER RESULTS
+// ════════════════════════════════════════════
+function renderResults(lines, totalCost, net, wasteP) {
+  const typeLabels = {
+    'vinyl-click':'Vinyl Click (LVT/LVP)',
+    'vinyl-kolla':'Vinyl Κόλλας',
+    'pvc-rolo':'PVC Ρολό',
+    'laminate':'Laminate'
+  };
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('el-GR') + '  ' +
+    now.toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'});
+
+  const roomsList = rooms
+    .filter(r => roomArea(r) > 0)
+    .map(r => {
+      const n = r.name || `Χώρος ${r.id}`;
+      const a = roomArea(r);
+      const detail = r.mode==='lxw' ? ` (${r.len}×${r.wid})` : '';
+      return `${n}${detail}: ${fmt2(a)} m²`;
+    }).join(' · ');
+
+  let tbody = lines.map(line => {
+    if (line.type === 'cat')  return `<tr class="cat"><td colspan="3">${line.lbl}</td></tr>`;
+    if (line.type === 'note') return `<tr class="note-row"><td colspan="3">⤷ ${line.txt}</td></tr>`;
+    if (line.type === 'cost') {
+      return `<tr>
+        <td>${line.lbl}</td>
+        <td class="cost-val" colspan="2">${fmtN(line.cost)} €</td>
+      </tr>`;
+    }
+    // normal row
+    let qStr;
+    if (Number.isInteger(line.qty) || line.unit === 'τεμ.') {
+      qStr = Math.ceil(line.qty) + ' ' + line.unit;
+    } else {
+      qStr = fmt2(line.qty) + ' ' + line.unit;
+    }
+    const noteHtml = line.note ? `<br><span style="font-size:.72rem;color:#94a3b8">${line.note}</span>` : '';
+    return `<tr ${line.hl ? 'class="hl"' : ''}>
+      <td>${line.lbl}${noteHtml}</td>
+      <td class="qty-val" colspan="2">${qStr}</td>
+    </tr>`;
+  }).join('');
+
+  const section = document.getElementById('resultsSection');
+  section.style.display = 'block';
+  section.innerHTML = `
+  <div class="results-wrap">
+    <div class="results-hdr">Αποτελέσματα Υπολογισμού</div>
+    <div class="meta-row">
+      <div class="meta-item"><div class="lbl">Τύπος δαπέδου</div><div class="val">${typeLabels[floorType]}</div></div>
+      <div class="meta-item"><div class="lbl">Συνολικά m²</div><div class="val">${fmt2(net)} m²</div></div>
+      <div class="meta-item"><div class="lbl">Απώλειες</div><div class="val">${wasteP}%</div></div>
+      <div class="meta-item"><div class="lbl">Ημερομηνία</div><div class="val">${dateStr}</div></div>
+    </div>
+    ${roomsList ? `<div style="font-size:.78rem;color:#64748b;margin-bottom:14px"><strong>Χώροι:</strong> ${roomsList}</div>` : ''}
+    <table class="rt">
+      <thead><tr><th>Περιγραφή</th><th colspan="2" style="text-align:right">Ποσότητα / Κόστος</th></tr></thead>
+      <tbody>
+        ${tbody}
+        <tr class="total-sep"><td colspan="3"></td></tr>
+        <tr class="grand-total">
+          <td><strong>ΣΥΝΟΛΙΚΟ ΚΟΣΤΟΣ</strong></td>
+          <td class="cost-val" colspan="2" style="font-size:1.2rem">${fmtN(totalCost)} €</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="btn-row no-print">
+      <button class="btn-print btn-green" onclick="window.print()">🖨 Εκτύπωση / Αποθήκευση PDF</button>
+      <button class="btn-print btn-blue" onclick="document.getElementById('resultsSection').style.display='none';window.scrollTo(0,0)">↩ Νέος Υπολογισμός</button>
+    </div>
+  </div>`;
+
+  section.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+init();
+</script>
+</body>
+</html>
