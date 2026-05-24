@@ -283,7 +283,7 @@ function totalPerimeter() { return rooms.reduce((s,r) => s + roomPerimeter(r), 0
 function onRoomsChange() {
   const area = totalArea();
   document.getElementById('totalAreaDisplay').textContent = fmt2(area) + ' m²';
-  autoUpdateSkirting();
+  _updateSkirtMeters();
 }
 
 // ════════════════════════════════════════════
@@ -462,18 +462,21 @@ function renderSkirting() {
 let skirtManual = false;
 let connManual  = false;
 
+// Καλείται όταν αλλάζουν πόρτες/πλάτος πόρτας
 function autoUpdateSkirting() {
-  onRoomsChange();
+  _updateSkirtMeters();
+}
+
+// Κεντρική συνάρτηση ενημέρωσης σοβατεπί — χωρίς recursion
+function _updateSkirtMeters() {
   const skEl = document.getElementById('skirtMeters');
-  if (!skEl) return;
-  if (!skirtManual) {
-    const perim = totalPerimeter();
-    const doors = parseInt(document.getElementById('numDoors')?.value||0)||0;
-    const dw    = parseFloat(document.getElementById('doorW')?.value||0.9)||0.9;
-    const meters = Math.max(0, perim - doors*dw);
-    skEl.value = meters.toFixed(2);
-    syncConnector();
-  }
+  if (!skEl || skirtManual) return;
+  const perim = totalPerimeter();
+  const doors = parseInt(document.getElementById('numDoors')?.value||0)||0;
+  const dw    = parseFloat(document.getElementById('doorW')?.value||0.9)||0.9;
+  const meters = Math.max(0, perim - doors*dw);
+  skEl.value = meters.toFixed(2);
+  syncConnector();
 }
 
 function syncConnector() {
@@ -714,7 +717,7 @@ function renderResults(lines, totalCost, net, wasteP) {
     }
     // normal row
     let qStr;
-    if (Number.isInteger(line.qty) || line.unit === 'τεμ.') {
+    if (line.unit === 'τεμ.') {
       qStr = Math.ceil(line.qty) + ' ' + line.unit;
     } else {
       qStr = fmt2(line.qty) + ' ' + line.unit;
