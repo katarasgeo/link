@@ -291,7 +291,7 @@ function onRoomsChange() {
 // ════════════════════════════════════════════
 function renderParams() {
   const t = floorType;
-  const defaultWaste = (t === 'pvc-rolo') ? 10 : 5;
+  const defaultWaste = 5;
   let html = '';
 
   if (t === 'vinyl-click' || t === 'laminate') {
@@ -355,7 +355,7 @@ function renderParams() {
   } else if (t === 'pvc-rolo') {
     html = `
     <div class="grid4">
-      <div class="field"><label>Απώλειες %</label>
+      <div class="field"><label>Απώλειες κοπής %</label>
         <input type="number" id="wasteP" step="1" min="0" max="50" value="${defaultWaste}"></div>
       <div class="field"><label>Πλάτος ρολού (m)</label>
         <select id="rollWidthSel" onchange="toggleCustomRoll()">
@@ -599,10 +599,12 @@ function calculate() {
   if (t === 'pvc-rolo') {
     const rollW = getRollWidth();
 
-    // Strip calculation per room
-    let totalRunM = 0;
-    let stripNotes = [];
-    let hasUnknown = false;
+    // ── Υπολογισμός φύλλων ανά χώρο ──────────────────────────
+    // Γεωμετρική λογική: κάθε λωρίδα = πλήρες πλάτος ρολού × μήκος χώρου
+    // Το % απωλειών αφορά μόνο επιπλέον κοπές, ΟΧΙ τη γεωμετρική σπατάλη
+    let geoRunM = 0;
+    let roomDetails = [];
+    let hasM2Only = false;
 
     rooms.forEach(r => {
       const area = roomArea(r);
@@ -612,35 +614,64 @@ function calculate() {
         const l = parseFloat(r.len)||0, w = parseFloat(r.wid)||0;
         const longS = Math.max(l,w), shortS = Math.min(l,w);
         const strips = Math.ceil(shortS / rollW);
-        const runM = strips * longS;
-        totalRunM += runM;
-        stripNotes.push(`${rName}: ${strips} λωρίδ. × ${fmt2(longS)}m = ${fmt2(runM)} τρ.μ.`);
+        const roomRunM = strips * longS;
+        geoRunM += roomRunM;
+        const lastUsed = shortS - (strips - 1) * rollW;
+        roomDetails.push({ name: rName, strips, longS, shortS, rollW, roomRunM, lastUsed, netArea: l*w });
       } else {
-        if (rollW > 0) { totalRunM += area / rollW; hasUnknown = true; }
-        else totalRunM += Math.sqrt(area);
+        hasM2Only = true;
+        if (rollW > 0) geoRunM += area / rollW;
+        roomDetails.push({ name: rName, strips: null, netArea: area });
       }
     });
 
-    const totalRunMwaste = totalRunM * wasteFactor;
-    const effectiveArea = rollW > 0 ? totalRunMwaste * rollW : matWithWaste;
+    // Επιπλέον τρ.μ. για απώλειες κοπής
+    const cutRunM  = geoRunM * (wasteP / 100);
+    const totalRunM = geoRunM + cutRunM;
+    const geoArea   = rollW > 0 ? geoRunM  * rollW : geoRunM;
+    const buyArea   = rollW > 0 ? totalRunM * rollW : totalRunM;
+    const geoWaste  = geoArea - net;
 
-    row('Καθαρά m²', net, 'm²');
+    // ── Εμφάνιση ─────────────────────────────────────────────
+    row('Καθαρά m² χώρου', net, 'm²');
+
+    cat('ΑΝΑΛΥΣΗ ΦΥΛΛΩΝ ΡΟΛΟΥ');
+    roomDetails.forEach(rd => {
+      if (rd.strips !== null) {
+        for (let i = 1; i <= rd.strips; i++) {
+          const isLast = i === rd.strips;
+          const usedW  = isLast ? rd.lastUsed : rd.rollW;
+          const sheetM2 = rd.rollW * rd.longS;
+          let noteStr = `${fmt2(rd.rollW)}m × ${fmt2(rd.longS)}m`;
+          if (isLast && usedW < rd.rollW) {
+            noteStr += ` — χρήσιμο πλάτος: ${fmt2(usedW)}m (σπατάλη: ${fmt2(rd.rollW - usedW)}m)`;
+          }
+          row(`${rd.name} — Φύλλο ${i}`, rd.longS, 'τρ.μ.', { note: noteStr });
+        }
+      } else {
+        row(`${rd.name} — (εκτίμηση, χωρίς Μ×Π)`, rd.netArea, 'm²');
+      }
+    });
+
+    cat('ΣΥΝΟΛΟ ΑΓΟΡΑΣ PVC');
+    row('Γεωμετρικά τρ.μ. (σύνολο φύλλων)', geoRunM, 'τρ.μ.');
+    if (wasteP > 0) row(`+ Απώλειες κοπής ${wasteP}%`, cutRunM, 'τρ.μ.');
+    row('Τελικά τρ.μ. αγοράς', totalRunM, 'τρ.μ.', {hl:true});
     if (rollW > 0) {
-      row('Τρέχοντα μέτρα ρολού (χωρίς απώλειες)', totalRunM, 'τρ.μ.');
-      row(`Τρέχοντα μέτρα ρολού (με ${wasteP}% απώλειες)`, totalRunMwaste, 'τρ.μ.', {hl:true});
-      row('Πραγματική επιφάνεια αγοράς', effectiveArea, 'm²');
-      if (hasUnknown) noteRow('* Χώρος/οι χωρίς Μ×Π → εκτιμητικός υπολογισμός τρ.μ.');
-      if (stripNotes.length) noteRow('Ανά χώρο: ' + stripNotes.join('  |  '));
-    } else {
-      row(`m² με απώλειες ${wasteP}%`, matWithWaste, 'm²', {hl:true});
+      row('Πραγματική επιφάνεια αγοράς', buyArea, 'm²');
+      if (geoWaste > 0) {
+        row('Γεωμετρική σπατάλη ρολού', geoWaste, 'm²',
+          { note: `${fmt2(geoWaste / geoArea * 100)}% επί αγοράς` });
+      }
     }
-    costRow('Κόστος υλικού δαπέδου', effectiveArea * matPrice);
+    if (hasM2Only) noteRow('Χώρος/οι χωρίς Μ×Π → εκτιμητικός υπολογισμός');
+    costRow('Κόστος υλικού δαπέδου', buyArea * matPrice);
 
     // Glue
     const glueRate = nv('glueRate');
     if (glueRate > 0) {
       cat('ΚΟΛΛΑ');
-      const glueKg = effectiveArea * glueRate;
+      const glueKg = buyArea * glueRate;
       row('Κόλλα', glueKg, 'kg', {note:`${glueRate} kg/m²`});
       const gPack = nv('gluePackKg');
       if (gPack > 0) row('Συσκευασίες κόλλας', Math.ceil(glueKg/gPack), 'τεμ.', {note:`${gPack} kg/τεμ.`});
