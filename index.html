@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#211d17">
+<title>George Kataras | Βιοκαρπέτ Candia Αιγίου</title>
+<meta name="description" content="Βιοκαρπέτ Candia Αιγίου — Χαλιά, στρώματα & έπιπλα ύπνου από το 1990. Επικοινωνήστε ή επισκεφθείτε μας στο Αίγιο.">
+<meta property="og:title" content="George Kataras | Βιοκαρπέτ Candia Αιγίου">
+<meta property="og:description" content="Χαλιά, στρώματα & έπιπλα ύπνου από το 1990. Αίγιο, Κορίνθου 140.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23211d17'/%3E%3Ctext x='32' y='43' text-anchor='middle' font-family='Georgia,serif' font-size='34' fill='%23c6a15b'%3EB%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --ivory: #faf7f2;
+    --paper: #fffdfa;
+    --stone-100: #f3eee5;
+    --stone-200: #e8e0d2;
+    --ink: #211d17;
+    --ink-700: #3a342a;
+    --ink-500: #6b6255;
+    --oak: #a9825a;
+    --oak-600: #75532f;
+    --oak-100: #cbb593;
+    --gold: #c6a15b;
+    --line: #e3dccc;
+    --green: #1f9d55;
+    --vh: 1vh;
+  }
+
+  html, body {
+    height: 100%;
+    width: 100%;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--ink);
+    color: var(--ink);
+    min-height: calc(var(--vh, 1vh) * 100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Self-contained editorial backdrop — layered warm gradients + fine grain, no external imagery */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 18% 12%, rgba(198, 161, 91, 0.24) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 88% 82%, rgba(169, 130, 90, 0.20) 0%, transparent 60%),
+      radial-gradient(ellipse 90% 70% at 50% 100%, rgba(58, 52, 42, 0.55) 0%, transparent 70%),
+      linear-gradient(160deg, #2a251d 0%, #211d17 45%, #17140f 100%);
+    animation: drift 26s ease-in-out infinite alternate;
+  }
+
+  .backdrop::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.5;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+  }
+
+  @keyframes drift {
+    from { background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%; }
+    to   { background-position: 3% 4%, -3% -4%, 0% 2%, 0% 0%; }
+  }
+
+  .container {
+    width: 100%;
+    min-height: calc(var(--vh, 1vh) * 100);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 420px;
+    max-height: calc(var(--vh, 1vh) * 100 - 40px);
+    background: var(--paper);
+    border-radius: 22px;
+    box-shadow:
+      0 30px 80px -20px rgba(0, 0, 0, 0.55),
+      0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 25%, var(--oak-100) 50%, var(--gold) 75%, transparent 100%);
+    z-index: 5;
+  }
+
+  .card-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 36px 28px 28px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--oak-100) transparent;
+  }
+  .card-content::-webkit-scrollbar { width: 4px; }
+  .card-content::-webkit-scrollbar-track { background: transparent; }
+  .card-content::-webkit-scrollbar-thumb { background: var(--oak-100); border-radius: 2px; }
+
+  /* ---------- Entrance choreography ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+  .d1 { animation-delay: .05s; } .d2 { animation-delay: .12s; } .d3 { animation-delay: .19s; }
+  .d4 { animation-delay: .26s; } .d5 { animation-delay: .33s; } .d6 { animation-delay: .40s; }
+  .d7 { animation-delay: .47s; } .d8 { animation-delay: .54s; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .backdrop { animation: none; }
+    .reveal { opacity: 1; transform: none; animation: none; }
+    * { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+  }
+
+  /* ---------- Focus ---------- */
+  a:focus-visible, button:focus-visible {
+    outline-width: 2px;
+    outline-style: solid;
+    outline-color: var(--ink);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 5px var(--paper);
+    border-radius: 3px;
+  }
+
+  /* ---------- Profile ---------- */
+  .profile { text-align: center; margin-bottom: 22px; }
+
+  .avatar-wrapper {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .avatar-ring {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    padding: 3px;
+    background: conic-gradient(from 180deg, var(--gold), var(--oak-100), var(--gold));
+    box-shadow: 0 12px 30px -8px rgba(117, 83, 47, 0.55);
+    animation: glow 4.5s ease-in-out infinite;
+  }
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 12px 30px -8px rgba(117, 83, 47, 0.45); }
+    50% { box-shadow: 0 14px 36px -6px rgba(117, 83, 47, 0.65); }
+  }
+  @media (prefers-reduced-motion: reduce) { .avatar-ring { animation: none; } }
+
+  .avatar {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid var(--paper);
+    background: var(--stone-100);
+  }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .status-dot {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 15px;
+    height: 15px;
+    background: var(--green);
+    border-radius: 50%;
+    border: 2.5px solid var(--paper);
+    box-shadow: 0 2px 6px rgba(31, 157, 85, 0.5);
+  }
+  .status-dot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2.2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { opacity: .6; transform: scale(1); }
+    100% { opacity: 0; transform: scale(2.2); }
+  }
+  @media (prefers-reduced-motion: reduce) { .status-dot::after { animation: none; display: none; } }
+
+  .title {
+    font-size: 11px;
+    color: var(--oak-600);
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .name {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 6px;
+    letter-spacing: 0.01em;
+  }
+
+  .business-name {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink-700);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .location {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: var(--ink-500);
+    font-size: 13px;
+  }
+  .icon { width: 15px; height: 15px; flex-shrink: 0; }
+
+  /* ---------- Section label ---------- */
+  .section-label {
+    text-align: center;
+    font-size: 10.5px;
+    color: var(--ink-500);
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    font-weight: 600;
+    margin: 22px 0 14px;
+  }
+  .section-label:first-of-type { margin-top: 0; }
+
+  /* ---------- Phone buttons ---------- */
+  .phone-grid {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+
+  .phone-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 13px;
+    border-radius: 50px;
+    border: 1.5px solid var(--line);
+    color: var(--ink-700);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--paper);
+    min-height: 46px;
+    width: 46px;
+    overflow: hidden;
+  }
+  .phone-btn span {
+    max-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 0;
+    transition: max-width 0.35s ease, opacity 0.25s ease, margin-left 0.35s ease;
+  }
+  .phone-btn:hover, .phone-btn:focus-visible {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    width: auto;
+    padding: 13px 20px;
+    box-shadow: 0 6px 18px -6px rgba(33, 29, 23, 0.35);
+  }
+  .phone-btn:hover span, .phone-btn:focus-visible span {
+    max-width: 160px;
+    opacity: 1;
+    margin-left: 9px;
+  }
+
+  /* ---------- Social row (monochrome, refined) ---------- */
+  .social-grid {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .social-btn {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--ink-700);
+    border: 1.5px solid var(--line);
+    background: var(--paper);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .social-btn:hover, .social-btn:focus-visible {
+    transform: translateY(-2px);
+    color: var(--paper);
+    border-color: transparent;
+  }
+  .social-btn.facebook:hover, .social-btn.facebook:focus-visible { background: #1877F2; }
+  .social-btn.instagram:hover, .social-btn.instagram:focus-visible {
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  }
+  .social-btn.whatsapp:hover, .social-btn.whatsapp:focus-visible { background: #25D366; }
+  .social-btn.maps:hover, .social-btn.maps:focus-visible { background: #EA4335; }
+  .icon-social { width: 20px; height: 20px; }
+
+  /* ---------- Divider ---------- */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--gold) 50%, transparent 100%);
+    opacity: 0.55;
+    margin: 24px 0;
+  }
+
+  /* ---------- Link grid ---------- */
+  .links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 14px 12px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 13.5px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    min-height: 48px;
+  }
+  .btn:hover, .btn:focus-visible {
+    background: var(--oak-600);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px -8px rgba(33, 29, 23, 0.4);
+  }
+  .btn .icon { width: 16px; height: 16px; opacity: 0.85; }
+
+  /* ---------- Hours ---------- */
+  .hours-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding: 10px 18px;
+    background: rgba(31, 157, 85, 0.09);
+    border-radius: 50px;
+    color: #16793f;
+    font-size: 12.5px;
+    font-weight: 600;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hours-dot { width: 7px; height: 7px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+
+  /* ---------- Footer ---------- */
+  .footer {
+    text-align: center;
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .footer-brand {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+  .footer-address { font-size: 12.5px; color: var(--ink-500); margin-bottom: 4px; }
+  .footer-text { font-size: 11px; color: var(--ink-500); opacity: 0.85; letter-spacing: 0.02em; }
+
+  /* ---------- Responsive ---------- */
+  @media (min-width: 400px) {
+    .card-content { padding: 42px 34px 32px; }
+    .avatar-ring { width: 108px; height: 108px; }
+    .name { font-size: 33px; }
+  }
+
+  @media (max-height: 620px) {
+    .card { max-height: calc(var(--vh, 1vh) * 100 - 20px); }
+    .container { padding: 10px; }
+    .profile { margin-bottom: 14px; }
+    .avatar-ring { width: 72px; height: 72px; }
+    .name { font-size: 24px; }
+    .section-label { margin: 14px 0 10px; }
+    .divider { margin: 16px 0; }
+    .hours-badge { margin-top: 14px; }
+    .footer { margin-top: 14px; padding-top: 14px; }
+  }
+
+  @media (hover: none) {
+    .social-btn:hover { transform: none; }
+    .btn:hover { transform: none; box-shadow: none; }
+    .phone-btn:active span { max-width: 160px; opacity: 1; margin-left: 9px; }
+    .phone-btn:active { background: var(--ink); color: var(--paper); border-color: var(--ink); width: auto; padding: 13px 20px; }
+  }
+
+  @supports (padding: max(0px)) {
+    .container {
+      padding-left: max(20px, env(safe-area-inset-left));
+      padding-right: max(20px, env(safe-area-inset-right));
+      padding-top: max(20px, env(safe-area-inset-top));
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+  }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--ink);
+    color: var(--paper);
+    padding: 13px 24px;
+    border-radius: 50px;
+    font-size: 13.5px;
+    font-weight: 500;
+    z-index: 100;
+    box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <div class="container">
+    <main class="card">
+      <div class="card-content">
+
+        <div class="profile reveal d1">
+          <div class="avatar-wrapper">
+            <div class="avatar-ring">
+              <div class="avatar">
+                <img src="profile.jpg" alt="George Kataras, ιδιοκτήτης του Βιοκαρπέτ Candia Αιγίου" width="216" height="216">
+              </div>
+            </div>
+            <span class="status-dot" aria-hidden="true"></span>
+          </div>
+
+          <p class="title">Owner</p>
+          <h1 class="name">George Kataras</h1>
+          <p class="business-name">Βιοκαρπέτ Candia Αιγίου</p>
+
+          <p class="location">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span>Κορίνθου 140, Αίγιο</span>
+          </p>
+        </div>
+
+        <div class="phone-grid reveal d2">
+          <a href="tel:2691062265" class="phone-btn" aria-label="Κλήση στο κατάστημα, 26910 62265">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+            </svg>
+            <span>26910 62265</span>
+          </a>
+          <a href="tel:6944282924" class="phone-btn" aria-label="Κλήση στο κινητό, 6944 282924">
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+            </svg>
+            <span>6944 282924</span>
+          </a>
+        </div>
+
+        <p class="section-label reveal d3">Ακολουθήστε μας</p>
+        <div class="social-grid reveal d3">
+          <a href="https://www.facebook.com/biokarpetaigio" target="_blank" rel="noopener noreferrer" class="social-btn facebook" aria-label="Facebook">
+            <svg class="icon-social" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/biokarpetaigio/" target="_blank" rel="noopener noreferrer" class="social-btn instagram" aria-label="Instagram">
+            <svg class="icon-social" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+            </svg>
+          </a>
+          <a href="https://wa.me/306944282924" target="_blank" rel="noopener noreferrer" class="social-btn whatsapp" aria-label="WhatsApp">
+            <svg class="icon-social" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347M12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884M20.463 3.488A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413"/>
+            </svg>
+          </a>
+          <a href="https://share.google/mLMIJXNK0MCL6eKJv" target="_blank" rel="noopener noreferrer" class="social-btn maps" aria-label="Google Maps">
+            <svg class="icon-social" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="divider reveal d4"></div>
+
+        <p class="section-label reveal d5">Επισκεφθείτε μας</p>
+        <div class="links reveal d5">
+          <a href="#" class="btn" data-placeholder>
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+            </svg>
+            Website
+          </a>
+          <a href="#" class="btn" data-placeholder>
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+            Κατάλογος
+          </a>
+          <a href="#" class="btn" data-placeholder>
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+            </svg>
+            Έργα
+          </a>
+          <a href="#" class="btn" data-placeholder>
+            <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+            </svg>
+            Κριτικές
+          </a>
+        </div>
+
+        <div class="hours-badge reveal d6">
+          <span class="hours-dot" aria-hidden="true"></span>
+          <span>Ανοιχτά: 9:00 — 21:00</span>
+        </div>
+
+        <div class="footer reveal d7">
+          <p class="footer-brand">Βιοκαρπέτ Candia Αιγίου</p>
+          <p class="footer-address">Κορίνθου 140, Αίγιο</p>
+          <p class="footer-text">Fine Rugs · Mattresses · Bedroom Living — Est. 1990</p>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" role="status" aria-live="polite" id="toast"></div>
+
+  <script>
+    // Placeholder-link toast
+    var toastEl = document.getElementById('toast');
+    var toastTimer;
+    document.querySelectorAll('[data-placeholder]').forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        clearTimeout(toastTimer);
+        toastEl.textContent = 'Προσθέστε το link σας!';
+        toastEl.classList.add('show');
+        toastTimer = setTimeout(function () {
+          toastEl.classList.remove('show');
+        }, 2200);
+      });
+    });
+
+    // Prevent double-tap zoom on iOS
+    var lastTouchEnd = 0;
+    document.addEventListener('touchend', function (e) {
+      var now = Date.now();
+      if (now - lastTouchEnd <= 300) e.preventDefault();
+      lastTouchEnd = now;
+    }, false);
+
+    // Accurate viewport height on mobile browsers
+    function setViewportHeight() {
+      document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px');
+    }
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+  </script>
+</body>
+</html>
