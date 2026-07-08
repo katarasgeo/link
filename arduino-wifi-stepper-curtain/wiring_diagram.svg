@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="dot" markerWidth="8" markerHeight="8" refX="4" refY="4">
+      <circle cx="4" cy="4" r="3" fill="#333"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="800" fill="#ffffff"/>
+  <text x="600" y="34" text-anchor="middle" font-size="24" font-weight="bold" fill="#111">ESP32 + TB6600 + NEMA17/23 Roller Shade Wiring Diagram</text>
+  <text x="600" y="56" text-anchor="middle" font-size="13" fill="#555">Shade: 180cm wide x 329cm drop | 40mm roller tube | 1:1 belt drive</text>
+
+  <!-- Power Supply -->
+  <rect x="40" y="120" width="180" height="90" rx="8" fill="#fdeeee" stroke="#c0392b" stroke-width="2"/>
+  <text x="130" y="150" text-anchor="middle" font-size="15" font-weight="bold" fill="#c0392b">DC Power Supply</text>
+  <text x="130" y="170" text-anchor="middle" font-size="12" fill="#333">24V DC (motor)</text>
+  <text x="130" y="188" text-anchor="middle" font-size="12" fill="#333">+ / GND terminals</text>
+
+  <!-- TB6600 Driver -->
+  <rect x="360" y="90" width="230" height="290" rx="8" fill="#eef4fd" stroke="#2c5aa0" stroke-width="2"/>
+  <text x="475" y="115" text-anchor="middle" font-size="16" font-weight="bold" fill="#2c5aa0">TB6600 Stepper Driver</text>
+
+  <text x="375" y="145" font-size="12" fill="#111">VCC (9-42V)</text>
+  <text x="375" y="163" font-size="12" fill="#111">GND</text>
+  <line x1="220" y1="150" x2="360" y2="140" stroke="#c0392b" stroke-width="2" marker-end="url(#dot)"/>
+  <line x1="220" y1="190" x2="360" y2="158" stroke="#333" stroke-width="2" marker-end="url(#dot)"/>
+
+  <text x="375" y="195" font-size="12" fill="#111">A+</text>
+  <text x="375" y="213" font-size="12" fill="#111">A-</text>
+  <text x="375" y="231" font-size="12" fill="#111">B+</text>
+  <text x="375" y="249" font-size="12" fill="#111">B-</text>
+
+  <text x="375" y="277" font-size="12" fill="#111">PUL+</text>
+  <text x="375" y="295" font-size="12" fill="#111">PUL-</text>
+  <text x="375" y="313" font-size="12" fill="#111">DIR+</text>
+  <text x="375" y="331" font-size="12" fill="#111">DIR-</text>
+  <text x="375" y="349" font-size="12" fill="#111">ENA+</text>
+  <text x="375" y="367" font-size="12" fill="#111">ENA-</text>
+
+  <!-- NEMA17/23 Motor -->
+  <circle cx="800" cy="220" r="70" fill="#f6f0fb" stroke="#7d3c98" stroke-width="2"/>
+  <text x="800" y="215" text-anchor="middle" font-size="14" font-weight="bold" fill="#7d3c98">NEMA17/23</text>
+  <text x="800" y="233" text-anchor="middle" font-size="13" fill="#7d3c98">Stepper Motor</text>
+  <line x1="590" y1="195" x2="732" y2="205" stroke="#111" stroke-width="2" marker-end="url(#dot)"/>
+  <line x1="590" y1="213" x2="732" y2="215" stroke="#111" stroke-width="2" marker-end="url(#dot)"/>
+  <line x1="590" y1="231" x2="732" y2="225" stroke="#111" stroke-width="2" marker-end="url(#dot)"/>
+  <line x1="590" y1="249" x2="732" y2="235" stroke="#111" stroke-width="2" marker-end="url(#dot)"/>
+  <text x="660" y="190" font-size="11" fill="#555">A+</text>
+  <text x="660" y="208" font-size="11" fill="#555">A-</text>
+  <text x="660" y="245" font-size="11" fill="#555">B+</text>
+  <text x="660" y="263" font-size="11" fill="#555">B-</text>
+
+  <!-- ESP32 board -->
+  <rect x="40" y="420" width="260" height="330" rx="8" fill="#eafaf1" stroke="#1e8449" stroke-width="2"/>
+  <text x="170" y="448" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e8449">ESP32 Dev Board</text>
+
+  <text x="55" y="480" font-size="12" fill="#111">5V (VIN)</text>
+  <text x="55" y="500" font-size="12" fill="#111">GND</text>
+  <text x="55" y="530" font-size="12" fill="#111">GPIO25 -&gt; STEP (PUL-)</text>
+  <text x="55" y="550" font-size="12" fill="#111">GPIO26 -&gt; DIR (DIR-)</text>
+  <text x="55" y="570" font-size="12" fill="#111">GPIO27 -&gt; ENABLE (ENA-)</text>
+  <text x="55" y="600" font-size="12" fill="#111">GPIO32 -&gt; LIMIT_OPEN</text>
+  <text x="55" y="620" font-size="12" fill="#111">GPIO33 -&gt; LIMIT_CLOSE</text>
+  <text x="55" y="650" font-size="12" fill="#111">3V3</text>
+
+  <!-- Limit switches -->
+  <rect x="40" y="700" width="120" height="60" rx="6" fill="#fff8e1" stroke="#b7950b" stroke-width="2"/>
+  <text x="100" y="722" text-anchor="middle" font-size="12" font-weight="bold" fill="#7d6608">LIMIT_OPEN</text>
+  <text x="100" y="738" text-anchor="middle" font-size="11" fill="#333">switch (NO)</text>
+
+  <rect x="180" y="700" width="120" height="60" rx="6" fill="#fff8e1" stroke="#b7950b" stroke-width="2"/>
+  <text x="240" y="722" text-anchor="middle" font-size="12" font-weight="bold" fill="#7d6608">LIMIT_CLOSE</text>
+  <text x="240" y="738" text-anchor="middle" font-size="11" fill="#333">switch (NO)</text>
+
+  <line x1="100" y1="700" x2="100" y2="605" stroke="#b7950b" stroke-width="2" marker-end="url(#dot)"/>
+  <line x1="240" y1="700" x2="240" y2="625" stroke="#b7950b" stroke-width="2" marker-end="url(#dot)"/>
+  <line x1="60" y1="730" x2="20" y2="730" stroke="#333" stroke-width="2"/>
+  <line x1="200" y1="730" x2="20" y2="730" stroke="#333" stroke-width="2"/>
+  <line x1="20" y1="730" x2="20" y2="497" stroke="#333" stroke-width="2" marker-end="url(#dot)"/>
+  <text x="10" y="490" font-size="10" fill="#555" text-anchor="end">to GND</text>
+
+  <!-- ESP32 -> TB6600 wiring -->
+  <line x1="300" y1="480" x2="360" y2="140" stroke="#c0392b" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#dot)"/>
+  <text x="315" y="300" font-size="11" fill="#c0392b" transform="rotate(-70 315 300)">5V -&gt; PUL+/DIR+/ENA+ (tied together)</text>
+
+  <line x1="300" y1="500" x2="360" y2="158" stroke="#333" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#dot)"/>
+
+  <line x1="300" y1="530" x2="360" y2="295" stroke="#2c5aa0" stroke-width="2" marker-end="url(#dot)"/>
+  <text x="305" y="420" font-size="11" fill="#2c5aa0">GPIO25 -&gt; PUL-</text>
+
+  <line x1="300" y1="550" x2="360" y2="331" stroke="#2c5aa0" stroke-width="2" marker-end="url(#dot)"/>
+  <text x="305" y="443" font-size="11" fill="#2c5aa0">GPIO26 -&gt; DIR-</text>
+
+  <line x1="300" y1="570" x2="360" y2="367" stroke="#2c5aa0" stroke-width="2" marker-end="url(#dot)"/>
+  <text x="305" y="466" font-size="11" fill="#2c5aa0">GPIO27 -&gt; ENA-</text>
+
+  <!-- Common GND note -->
+  <rect x="620" y="440" width="540" height="130" rx="8" fill="#fdf2e9" stroke="#af601a" stroke-width="2"/>
+  <text x="890" y="465" text-anchor="middle" font-size="14" font-weight="bold" fill="#af601a">Important Wiring Notes</text>
+  <text x="635" y="490" font-size="12" fill="#333">1. ESP32 GND must be common with TB6600 logic GND (share the same ground rail).</text>
+  <text x="635" y="510" font-size="12" fill="#333">2. Motor power (24V) GND does NOT need to join ESP32 GND (opto-isolated PUL/DIR/ENA inputs).</text>
+  <text x="635" y="530" font-size="12" fill="#333">3. PUL-/DIR-/ENA- are active LOW: ESP32 pin LOW = pulse/enable ON (handled in firmware via setPinsInverted).</text>
+  <text x="635" y="550" font-size="12" fill="#333">4. Set TB6600 DIP switches for 1/16 microstepping and motor current to match your NEMA17/23 rated current.</text>
+
+  <!-- Roller shade mechanism sketch -->
+  <rect x="700" y="620" width="460" height="150" rx="8" fill="#f4f6f7" stroke="#5d6d7e" stroke-width="2"/>
+  <text x="930" y="645" text-anchor="middle" font-size="14" font-weight="bold" fill="#34495e">Roller Shade Mechanism (side view)</text>
+  <circle cx="770" cy="700" r="22" fill="#d6dbdf" stroke="#34495e" stroke-width="2"/>
+  <text x="770" y="705" text-anchor="middle" font-size="10" fill="#333">40mm tube</text>
+  <circle cx="900" cy="700" r="14" fill="#d6dbdf" stroke="#7d3c98" stroke-width="2"/>
+  <text x="900" y="704" text-anchor="middle" font-size="9" fill="#333">motor</text>
+  <text x="900" y="722" text-anchor="middle" font-size="9" fill="#333">pulley</text>
+  <line x1="792" y1="690" x2="886" y2="690" stroke="#34495e" stroke-width="4"/>
+  <line x1="792" y1="710" x2="886" y2="710" stroke="#34495e" stroke-width="4"/>
+  <text x="930" y="700" font-size="10" fill="#333">1:1 belt (roller pulley = motor pulley)</text>
+  <line x1="770" y1="722" x2="770" y2="760" stroke="#8e9fa8" stroke-width="10"/>
+  <text x="1030" y="760" text-anchor="end" font-size="11" fill="#333">Fabric drop 3.29 m (closed) / rolled up (open)</text>
+</svg>
