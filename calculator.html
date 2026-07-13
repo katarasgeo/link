@@ -306,7 +306,7 @@
             const vat = parseFloat(vatEl.value) || 0;
             const discount = parseFloat(discountEl.value) || 0;
 
-            const initialPrice = wholesale * (1 + vat / 100);
+            const initialPrice = wholesale * 2 * (1 + vat / 100);
             const finalPrice = initialPrice * (1 - discount / 100);
 
             initialPriceEl.textContent = formatEuro(initialPrice);
